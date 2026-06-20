@@ -30,7 +30,7 @@ class SettingsTab(ctk.CTkFrame):
         ctk.CTkLabel(self, text="테마", font=section_font).pack(anchor="w", **pad)
         row2 = ctk.CTkFrame(self, fg_color="transparent")
         row2.pack(anchor="w", padx=24, pady=(0, 8))
-        for val, label in [("dark", "Dark"), ("light", "Light")]:
+        for val, label in [("dark", "다크"), ("light", "라이트")]:
             ctk.CTkRadioButton(
                 row2, text=label, variable=self._theme_var,
                 value=val, command=self._save,
@@ -39,7 +39,7 @@ class SettingsTab(ctk.CTkFrame):
         ctk.CTkLabel(self, text="시작 탭", font=section_font).pack(anchor="w", **pad)
         row3 = ctk.CTkFrame(self, fg_color="transparent")
         row3.pack(anchor="w", padx=24, pady=(0, 8))
-        for val, label in [("overview", "Overview"), ("processes", "Processes")]:
+        for val, label in [("overview", "개요"), ("processes", "프로세스")]:
             ctk.CTkRadioButton(
                 row3, text=label, variable=self._start_tab_var,
                 value=val, command=self._save,

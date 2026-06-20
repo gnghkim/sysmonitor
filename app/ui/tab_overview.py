@@ -2,6 +2,9 @@ from collections import deque
 import customtkinter as ctk
 import matplotlib
 matplotlib.use("TkAgg")
+import matplotlib.pyplot as plt
+plt.rcParams["font.family"] = "Malgun Gothic"
+plt.rcParams["axes.unicode_minus"] = False
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from app.models.system_stats import SystemStats
@@ -22,14 +25,14 @@ class OverviewTab(ctk.CTkFrame):
         metrics.columnconfigure(1, weight=1)
 
         self._cpu_bar, self._cpu_lbl = self._make_bar(metrics, "CPU", 0)
-        self._mem_bar, self._mem_lbl = self._make_bar(metrics, "RAM", 1)
-        self._bat_bar, self._bat_lbl = self._make_bar(metrics, "Battery", 2)
+        self._mem_bar, self._mem_lbl = self._make_bar(metrics, "메모리", 1)
+        self._bat_bar, self._bat_lbl = self._make_bar(metrics, "배터리", 2)
 
         fig = Figure(figsize=(8, 3), dpi=90, facecolor="#1e1e1e")
         self._ax_cpu = fig.add_subplot(2, 1, 1)
         self._ax_mem = fig.add_subplot(2, 1, 2)
-        self._style_ax(self._ax_cpu, "CPU %")
-        self._style_ax(self._ax_mem, "RAM %")
+        self._style_ax(self._ax_cpu, "CPU 사용률 (%)")
+        self._style_ax(self._ax_mem, "메모리 사용률 (%)")
         self._line_cpu, = self._ax_cpu.plot(list(self._cpu_history), color="#4fc3f7", linewidth=1.5)
         self._line_mem, = self._ax_mem.plot(list(self._mem_history), color="#81c784", linewidth=1.5)
         fig.tight_layout(pad=1.2)
@@ -82,9 +85,9 @@ class OverviewTab(ctk.CTkFrame):
         if stats.battery_percent is not None:
             self._bat_bar.set(stats.battery_percent / 100)
             self._bat_lbl.configure(text=f"{stats.battery_percent:.0f}%")
-            status = "Charging" if stats.battery_charging else "Discharging"
-            remain = f" · {stats.battery_remaining_min}min left" if stats.battery_remaining_min is not None else ""
-            self._lbl_bat_detail.configure(text=f"Battery {status}{remain}")
+            status = "충전중" if stats.battery_charging else "방전중"
+            remain = f" · 잔여 {stats.battery_remaining_min}분" if stats.battery_remaining_min is not None else ""
+            self._lbl_bat_detail.configure(text=f"배터리 {status}{remain}")
         else:
             self._bat_bar.set(0)
             self._bat_lbl.configure(text="N/A")

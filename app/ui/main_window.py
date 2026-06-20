@@ -29,23 +29,23 @@ class MainWindow(ctk.CTk):
         self._tabs = ctk.CTkTabview(self)
         self._tabs.pack(fill="both", expand=True, padx=10, pady=10)
 
-        for name in ("Overview", "Processes", "Settings"):
+        for name in ("개요", "프로세스", "설정"):
             self._tabs.add(name)
 
-        self._overview = OverviewTab(self._tabs.tab("Overview"))
+        self._overview = OverviewTab(self._tabs.tab("개요"))
         self._overview.pack(fill="both", expand=True)
 
-        self._processes = ProcessesTab(self._tabs.tab("Processes"))
+        self._processes = ProcessesTab(self._tabs.tab("프로세스"))
         self._processes.pack(fill="both", expand=True)
 
         self._settings_tab = SettingsTab(
-            self._tabs.tab("Settings"),
+            self._tabs.tab("설정"),
             self._settings,
             on_change=self._apply_settings,
         )
         self._settings_tab.pack(fill="both", expand=True)
 
-        start = "Overview" if self._settings.start_tab == "overview" else "Processes"
+        start = "개요" if self._settings.start_tab == "overview" else "프로세스"
         self._tabs.set(start)
 
     def _poll(self):

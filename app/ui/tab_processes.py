@@ -119,6 +119,8 @@ class ProcessesTab(ctk.CTkFrame):
             return
         proc = next((p for p in self._all_processes if p.pid == pid), None)
         name = proc.name if proc else f"PID {pid}"
+        if proc and is_protected(proc.name):
+            return
         if not messagebox.askyesno("강제 종료 확인", f"'{name}' (PID {pid})을(를) 강제 종료하시겠습니까?"):
             return
         ok, msg = kill_process(pid)

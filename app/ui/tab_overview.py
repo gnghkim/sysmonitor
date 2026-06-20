@@ -40,11 +40,11 @@ class OverviewTab(ctk.CTkFrame):
 
         stats_row = ctk.CTkFrame(self, fg_color="transparent")
         stats_row.pack(fill="x", padx=10, pady=(5, 10))
-        self._lbl_temp = ctk.CTkLabel(stats_row, text="Temp: --")
+        self._lbl_temp = ctk.CTkLabel(stats_row, text="온도: --")
         self._lbl_temp.pack(side="left", padx=10)
-        self._lbl_disk = ctk.CTkLabel(stats_row, text="Disk: --")
+        self._lbl_disk = ctk.CTkLabel(stats_row, text="디스크: --")
         self._lbl_disk.pack(side="left", padx=10)
-        self._lbl_net = ctk.CTkLabel(stats_row, text="Net: --")
+        self._lbl_net = ctk.CTkLabel(stats_row, text="네트워크: --")
         self._lbl_net.pack(side="left", padx=10)
         self._lbl_bat_detail = ctk.CTkLabel(stats_row, text="")
         self._lbl_bat_detail.pack(side="right", padx=10)
@@ -69,7 +69,7 @@ class OverviewTab(ctk.CTkFrame):
         for spine in ax.spines.values():
             spine.set_color("#444444")
 
-    def update(self, stats: SystemStats):
+    def update(self, stats: SystemStats) -> None:
         self._cpu_history.append(stats.cpu_percent)
         self._mem_history.append(stats.mem_percent)
 
@@ -83,7 +83,7 @@ class OverviewTab(ctk.CTkFrame):
             self._bat_bar.set(stats.battery_percent / 100)
             self._bat_lbl.configure(text=f"{stats.battery_percent:.0f}%")
             status = "Charging" if stats.battery_charging else "Discharging"
-            remain = f" · {stats.battery_remaining_min}min left" if stats.battery_remaining_min else ""
+            remain = f" · {stats.battery_remaining_min}min left" if stats.battery_remaining_min is not None else ""
             self._lbl_bat_detail.configure(text=f"Battery {status}{remain}")
         else:
             self._bat_bar.set(0)
@@ -94,10 +94,10 @@ class OverviewTab(ctk.CTkFrame):
         self._line_mem.set_ydata(list(self._mem_history))
         self._canvas.draw_idle()
 
-        temp_str = f"Temp: {stats.cpu_temp:.0f}°C" if stats.cpu_temp is not None else "Temp: N/A"
+        temp_str = f"온도: {stats.cpu_temp:.0f}°C" if stats.cpu_temp is not None else "온도: N/A"
         self._lbl_temp.configure(text=temp_str)
         self._lbl_disk.configure(
-            text=f"Disk  R:{stats.disk_read_mbps:.1f}  W:{stats.disk_write_mbps:.1f} MB/s"
+            text=f"디스크  R:{stats.disk_read_mbps:.1f}  W:{stats.disk_write_mbps:.1f} MB/s"
         )
         self._lbl_net.configure(
             text=f"↑{stats.net_up_mbps:.2f}  ↓{stats.net_down_mbps:.2f} MB/s"
